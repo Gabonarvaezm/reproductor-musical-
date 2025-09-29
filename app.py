@@ -32,8 +32,15 @@ def index():
 
 @app.route("/list")
 def list_files():
+    # Se listan los archivos en uploads y se asegura que la lista doble esté sincronizada
     files = [f for f in os.listdir(app.config["UPLOAD_FOLDER"]) if allowed_file(f)]
     files.sort()
+
+    # Sincronizar playlist (solo si está vacía al inicio)
+    if playlist.is_empty():
+        for f in files:
+            playlist.append(f)
+
     return jsonify(files)
 
 
@@ -48,7 +55,10 @@ def upload_file():
         filename = secure_filename(file.filename)
         save_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
         file.save(save_path)
-        playlist.append(filename)  # Agregar a la lista doble
+
+        # Agregar a la lista doble
+        playlist.append(filename)
+
         return jsonify({"ok": True, "filename": filename})
     return jsonify({"error": "file not allowed"}), 400
 
@@ -91,4 +101,3 @@ def prev_song():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
-

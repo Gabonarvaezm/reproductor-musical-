@@ -1,14 +1,19 @@
-# lista doble
+# doubleLinkList.py
+
 class Node:
     def __init__(self, data):
         self.data = data
         self.prev = None
         self.next = None
 
+
 class DoublyLinkedList:
     def __init__(self):
         self.head = None
         self.current = None
+
+    def is_empty(self):
+        return self.head is None
 
     def append(self, data):
         new_node = Node(data)
@@ -41,14 +46,9 @@ class DoublyLinkedList:
     def next_song(self):
         if self.current and self.current.next:
             self.current = self.current.next
-            return self.current.data
-        return None
+        return self.get_current()
 
     def prev_song(self):
         if self.current and self.current.prev:
             self.current = self.current.prev
-            return self.current.data
-        return None
-
-    def get_current(self):
-        return self.current.data if self.current else None
+        return self.get_current_
